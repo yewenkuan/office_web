@@ -12,4 +12,23 @@
     <select id="getPage" resultType="com.example.office_web.entity.User">
         select u.id , u.name, t.name as officeName from user u left join office t on u.id = t.userid
     </select>
+
+    <insert id="insertUser">
+        insert into sys_user
+        VALUES (#{id},#{nickName}, #{city},  #{province}, #{openId}, #{avatarUrl}, #{createDate}, #{updateDate}
+        )
+    </insert>
+
+
+    <insert id="updateUser">
+        update sys_user set nickName = #{nickName}, city = #{city}, province =  #{province}, avatarUrl =  #{avatarUrl},
+        updateDate =  #{updateDate}
+        where openId = #{openId}
+    </insert>
+
+
+    <select id="getUserByOpenId" resultType="com.example.office_web.entity.User">
+        select id, nickName, city, province, open_id as openId, avatarUrl, create_date  as createDate, update_date as  updateDate
+        from sys_user where open_id = #{openId}
+    </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.example.office_web.web;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,11 +13,11 @@ public class BaseController {
      * @param content
      * @return
      */
-    public Map ajaxSucess(Object content){
+    public String ajaxSucess(Object content){
         Map map = new HashMap();
         map.put("success", true);
         map.put("content", content);
-        return map;
+        return JSON.toJSONString(map);
     }
 
     /**
@@ -23,10 +25,10 @@ public class BaseController {
      * @param content
      * @return
      */
-    public Map ajaxFail(Object content){
+    public String ajaxFail(Object content){
         Map map = new HashMap();
         map.put("success", false);
         map.put("content", content);
-        return map;
+        return JSON.toJSONString(map);
     }
 }

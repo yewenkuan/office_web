@@ -36,28 +36,28 @@ public class Sys_menuController extends  BaseController{
      * 获取菜单列表接口
      * @return
      */
-    public Map getSysMenuList(){
-        try{
-            List<Sys_menu>  menuList = sys_menuService.getSysMenuList();
-            return ajaxSucess(menuList);
-        }catch (Exception e){
-            return ajaxFail("获取菜单接口发生异常");
-        }
-    }
+//    public Map getSysMenuList(){
+//        try{
+//            List<Sys_menu>  menuList = sys_menuService.getSysMenuList();
+//            return ajaxSucess(menuList);
+//        }catch (Exception e){
+//            return ajaxFail("获取菜单接口发生异常");
+//        }
+//    }
 
     /**
      * 获取菜单列表接口
      * @return
      */
-    @RequestMapping("/testVue")
-    public Map testVue(){
-        try{
-            List<String>  menuList = new ArrayList<>();
-            menuList.add("菜单1");
-            menuList.add("菜单2");
-            return ajaxSucess(menuList);
-        }catch (Exception e){
-            return ajaxFail("获取菜单接口发生异常");
-        }
-    }
+//    @RequestMapping("/testVue")
+//    public Map testVue(){
+//        try{
+//            List<String>  menuList = new ArrayList<>();
+//            menuList.add("菜单1");
+//            menuList.add("菜单2");
+//            return ajaxSucess(menuList);
+//        }catch (Exception e){
+//            return ajaxFail("获取菜单接口发生异常");
+//        }
+//    }
 }

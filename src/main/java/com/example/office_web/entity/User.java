@@ -2,6 +2,8 @@ package com.example.office_web.entity;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -17,9 +19,25 @@ public class User extends Model<User> {
 
     private String id;
 
-    private String name;
+    private String nickName;
 
-    private String officeName;
+    private String city;
+
+    private String province;
+
+    private String openId;
+
+    private String avatarUrl;
+
+    private String sessionKey;
+
+    private Date createDate;
+
+    private Date updateDate;
+
+    private List<Role> roleList;
+
+
 
     public String getId() {
         return id;
@@ -28,33 +46,86 @@ public class User extends Model<User> {
     public void setId(String id) {
         this.id = id;
     }
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
 
-    public String getOfficeName() {
-        return officeName;
+
+
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setOfficeName(String officeName) {
-        this.officeName = officeName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-        "id=" + id +
-        ", name=" + name +
-                ",officeName="+officeName+
-        "}";
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
+
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 }

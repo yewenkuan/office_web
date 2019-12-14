@@ -40,4 +40,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return list;
 
     }
+
+
+    public void insertUser(User user){
+        userMapper.insertUser(user);
+    }
+
+    public void updateUser(User user){
+        userMapper.updateUser(user);
+    }
 }
