@@ -14,9 +14,9 @@ public class WebAppConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //登录拦截的管理器
-        InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());     //拦截的对象会进入这个类中进行判断
-        registration.addPathPatterns("/**");                    //所有路径都被拦截
-        registration.excludePathPatterns("/user/auth","/user/login");       //添加不拦截路径
+//        InterceptorRegistration registration = registry.addInterceptor(new LoginInterceptor());     //拦截的对象会进入这个类中进行判断
+//        registration.addPathPatterns("/**");                    //所有路径都被拦截
+//        registration.excludePathPatterns("/user/auth","/user/login", "/generate/productCode");       //添加不拦截路径
 
     }
 }
