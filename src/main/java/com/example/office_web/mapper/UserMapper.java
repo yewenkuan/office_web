@@ -27,4 +27,7 @@ public interface UserMapper extends BaseMapper<User> {
 
 
     public User getUserByOpenId(@Param("openId") String openId);
+
+
+    public User getUserByAccount(@Param("account")String account);
 }

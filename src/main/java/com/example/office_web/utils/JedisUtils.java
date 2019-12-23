@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,7 +94,7 @@ public class JedisUtils {
             value = new HashMap<>();
             Map<byte[], byte[]> map = jedis.hgetAll(key.getBytes("UTF-8"));
             for (Map.Entry<byte[], byte[]> e : map.entrySet()){
-                value.put(e.getKey().toString(), SerializeUtil.unserialize(e.getValue()));
+                value.put(new String(e.getKey()), SerializeUtil.unserialize(e.getValue()));
             }
             logger.debug("getObjectMap {} = {}", key, value);
         } catch (Exception e) {

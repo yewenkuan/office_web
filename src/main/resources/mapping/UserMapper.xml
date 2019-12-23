@@ -14,7 +14,7 @@
     </select>
 
     <insert id="insertUser">
-        insert into sys_user
+        insert into sys_user(id,nickName,city, province, open_Id, avatarUrl, create_date, update_date)
         VALUES (#{id},#{nickName}, #{city},  #{province}, #{openId}, #{avatarUrl}, #{createDate}, #{updateDate}
         )
     </insert>
@@ -22,13 +22,18 @@
 
     <insert id="updateUser">
         update sys_user set nickName = #{nickName}, city = #{city}, province =  #{province}, avatarUrl =  #{avatarUrl},
-        updateDate =  #{updateDate}
-        where openId = #{openId}
+        update_Date =  #{updateDate}
+        where open_Id = #{openId}
     </insert>
 
 
     <select id="getUserByOpenId" resultType="com.example.office_web.entity.User">
         select id, nickName, city, province, open_id as openId, avatarUrl, create_date  as createDate, update_date as  updateDate
         from sys_user where open_id = #{openId}
+    </select>
+
+
+    <select id="getUserByAccount" resultType="com.example.office_web.entity.User">
+        select password as pwd, open_id as openId from sys_user where login_name = #{account}
     </select>
 </mapper>

@@ -2,12 +2,16 @@ package com.example.office_web.utils;
 
 import com.example.office_web.consts.RedisKeyConsts;
 import com.example.office_web.entity.User;
+import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.shiro.WetchatSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
 import java.util.Map;
 
 public class UserUtils {
 
+    private static UserServiceImpl userService = SpringContextHolder.getBean(UserServiceImpl.class);
 
 
     public static User getUser(){
@@ -23,7 +27,12 @@ public class UserUtils {
         //        return null;
 
 
-        return WetchatSession.openIdThreaadLocal.get();
+
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+
+        return userService.getUserByOpenId(user.getOpenId());
+
 
     }
 }

@@ -49,4 +49,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public void updateUser(User user){
         userMapper.updateUser(user);
     }
+
+
+    public User getUserByAccount(String account){
+       return userMapper.getUserByAccount(account);
+    }
+
+
+    public User getUserByOpenId(String openId){
+        return userMapper.getUserByOpenId(openId);
+    }
 }

@@ -6,16 +6,14 @@ import com.example.office_web.entity.User;
 import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.service.webchat.WechatService;
 import com.example.office_web.shiro.WetchatSession;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -80,14 +78,39 @@ public class UserController extends BaseController{
         try {
 //            user.setOpenId("1222");
 //            user.setSessionKey("dsfiwk9i");
-            wechatService.login(user);
-            return ajaxSucess("login ok");
+            String sessionId =  wechatService.login(user);
+            return ajaxSucess(sessionId);
         } catch (Exception e) {
             logger.error("获取用户登陆异常", e);
             return ajaxFail("fail");
         }
     }
 
+
+
+    /**
+     * 记得补上@Qequestbody
+     * @param user
+     * @return
+     */
+    @PostMapping
+    @RequestMapping("/loginPc")
+    public String loginPc(@RequestBody User user){
+        try {
+//            user.setAccount("ywk");
+//            user.setPwd("1234");
+            String sessionId =  wechatService.loginPc(user);
+            if(StringUtils.isNotBlank(sessionId)){
+                return ajaxSucess(sessionId);
+            }else {
+                return  ajaxFail("fail");
+            }
+
+        } catch (Exception e) {
+            logger.error("获取用户登陆异常", e);
+            return ajaxFail("fail");
+        }
+    }
 
     /**
      * 这个就是访问时，cookie应该带信息 。缓存管理？？？？

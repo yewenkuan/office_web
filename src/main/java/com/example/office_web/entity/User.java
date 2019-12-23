@@ -17,6 +17,11 @@ public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;
 
+    private String account;//pc的账号
+
+    private String pwd;//pc的密码
+
+
     private String id;
 
     private String nickName;
@@ -127,5 +132,22 @@ public class User extends Model<User> {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 }

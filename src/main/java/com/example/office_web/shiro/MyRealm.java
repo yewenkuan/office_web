@@ -1,21 +1,31 @@
 package com.example.office_web.shiro;
 
+import com.example.office_web.consts.RedisKeyConsts;
 import com.example.office_web.entity.User;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.example.office_web.service.impl.UserServiceImpl;
+import com.example.office_web.utils.JedisUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class MyRealm extends AuthorizingRealm {
 
+    @Autowired
+    private UserServiceImpl userService;
+
+
+    private static final Integer EXPIRES = 86400;
     /**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */
@@ -51,9 +61,88 @@ role2=user:create,user:delete
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        String openId = (String) authenticationToken.getPrincipal();
+        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
+        String userName = usernamePasswordToken.getUsername();
+        if(StringUtils.isBlank(userName)){
+            throw new UnknownAccountException("msg:认证失败, 用户名为空，请重试.！！！");
+        }
+      String[] arr =  userName.split(":");
+        if(arr.length == 1){
+           return this.loginWetChat(arr[0]);
+        }else {
+           return loginPc(arr[0], usernamePasswordToken.getPassword().toString());
+        }
+
+
+    }
+
+
+
+    public SimpleAuthenticationInfo loginPc(String account, String pwd){
+        User user = userService.getUserByAccount(account);
+        if(user == null){
+            throw new UnknownAccountException("msg:认证失败, 用户名{"+ account+"}不存在，请重试.！！！");
+        }
+
+
+
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,user.getPwd(), "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
+
+        if(StringUtils.isNotBlank(pwd) && pwd.equals(user.getPwd())){
+            Subject subject = SecurityUtils.getSubject();
+            Session session = subject.getSession(false);//session不存在则创建session
+            if(session == null){
+                session =  subject.getSession(true);
+            }
+
+            System.out.println("sessionId 为："+session.getId());
+
+            WetchatSession wetchatSession = new WetchatSession();
+            wetchatSession.setId(session.getId());
+            wetchatSession.setOpenId(user.getOpenId());
+
+
+            wetchatSession.setLastAccessTime(new Date());
+            Map<String, Object> map = new HashMap<>();
+            map.put(RedisKeyConsts.USER_INFO_PREFIX+session.getId().toString(), wetchatSession);
+            System.out.println("验证登录================");
+            //下面这两行必须设置，不然第二次访问时，还是没登陆状态
+            wetchatSession.setAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY, simpleAuthenticationInfo.getPrincipals());
+            wetchatSession.setAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY, true);
+            JedisUtils.setObjectMap(RedisKeyConsts.USER_INFO_MAP_KEY, map, EXPIRES);
+        }
+
+        return simpleAuthenticationInfo;
+
+    }
+
+
+
+
+    public SimpleAuthenticationInfo loginWetChat(String openId){
         User user = new User();
         user.setOpenId(openId);
-        return new SimpleAuthenticationInfo(user,openId, "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession(false);//session不存在则创建session
+        if(session == null){
+            session =  subject.getSession(true);
+        }
+
+        System.out.println("sessionId 为："+session.getId());
+        WetchatSession wetchatSession = new WetchatSession();
+        wetchatSession.setId(session.getId());
+        wetchatSession.setOpenId(openId);
+
+
+        wetchatSession.setLastAccessTime(new Date());
+        Map<String, Object> map = new HashMap<>();
+        map.put(RedisKeyConsts.USER_INFO_PREFIX+session.getId().toString(), wetchatSession);
+        System.out.println("验证登录================");
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,openId, "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
+        //下面这两行必须设置，不然第二次访问时，还是没登陆状态
+        wetchatSession.setAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY, simpleAuthenticationInfo.getPrincipals());
+        wetchatSession.setAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY, true);
+        JedisUtils.setObjectMap(RedisKeyConsts.USER_INFO_MAP_KEY, map, EXPIRES);
+        return simpleAuthenticationInfo;
     }
 }

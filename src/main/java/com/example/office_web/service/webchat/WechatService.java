@@ -20,12 +20,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,56 +122,85 @@ public class WechatService {
      * @param user
      * @return
      */
-    public WetchatSession login(User user){
+    public String login(User user){
         if(StringUtils.isBlank(user.getOpenId())){
             return null;
         }
-//
-//
-//        Subject currentUser = SecurityUtils.getSubject();
-//        //这里将user.getSessionKey(), user.getOpenId()作为用户名和密码
-//        UsernamePasswordToken token = new UsernamePasswordToken(user.getSessionKey(), user.getOpenId());
-//
-//        // 4、认证
-//        try {
-//            currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
-//            return true;
-//        }catch (UnknownAccountException e)
-//        {
-//            logger.error("UnknownAccountException===账号不存在", e);
-//            return false;
-//        } catch (IncorrectCredentialsException e)
-//        {
-//            logger.error("IncorrectCredentialsException===密码不正确", e);
-//            return false;        }
-//        catch (AuthenticationException e) {
-//            logger.error("认证异常", e);
-//            return false;
-//        }\
-        WetchatSession session = null;
+
+
+        Subject currentUser = SecurityUtils.getSubject();
+        //这里将user.getSessionKey(), user.getOpenId()作为用户名和密码
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());
+
+        // 4、认证
         try {
-//            Subject currentUser = SecurityUtils.getSubject();
-//            UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());
-//            currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
-//            String sessionId = (String) currentUser.getSession().getId();//用处？？？？？？？
-//            session = new WetchatSession();
-//            session.setId(sessionId);
+            currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
+        }catch (UnknownAccountException e)
+        {
+            logger.error("UnknownAccountException===账号不存在", e);
+            return null;
+        } catch (IncorrectCredentialsException e)
+        {
+            logger.error("IncorrectCredentialsException===密码不正确", e);
+            return null;
+        }
+        catch (AuthenticationException e) {
+            logger.error("认证异常", e);
+            return null;
+        }
+
+        Subject subject = SecurityUtils.getSubject();
+        String  sessionId = subject.getSession().getId().toString();
+        try {
+
+
             user.setCreateDate(new Date());
             user.setId(UUID.randomUUID().toString());
             userService.insertUser(user);
         } catch (Exception e) {
             logger.info("===========>插入用户异常", e);
+            logger.info("========进行用户更新操作===========");
             user.setUpdateDate(new Date());
             userService.updateUser(user);
         }
-          Map<String, Object> map = new HashMap<>();
-           map.put(RedisKeyConsts.USER_INFO_PREFIX+user.getOpenId(), user);
-           JedisUtils.setObjectMap(RedisKeyConsts.USER_INFO_MAP_KEY, map, EXPIRES);
-           return session;
+
+           return sessionId;
         }
 
 
 
+        /*
+        pc端登陆
+         */
+    public String loginPc(User user){
+        Subject currentUser = SecurityUtils.getSubject();
+        //这里将user.getSessionKey(), user.getOpenId()作为用户名和密码
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount()+":pc", user.getPwd());
+
+        // 4、认证
+        try {
+            currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
+        }catch (UnknownAccountException e)
+        {
+            logger.error("UnknownAccountException===账号不存在", e);
+            return null;
+        } catch (IncorrectCredentialsException e)
+        {
+            logger.error("IncorrectCredentialsException===密码不正确", e);
+            return null;
+        }
+        catch (AuthenticationException e) {
+            logger.error("认证异常", e);
+            return null;
+        }
+
+        Subject subject = SecurityUtils.getSubject();
+        String  sessionId = subject.getSession().getId().toString();
+
+
+
+        return sessionId;
+    }
 
 
 }

@@ -8,7 +8,8 @@ import org.springframework.context.annotation.ImportResource;
 @MapperScan("com.example.office_web.mapper")
 @SpringBootApplication
 @ImportResource({
-		"classpath:spring-mvc.xml"
+		"classpath:spring-mvc.xml",
+		"classpath:spring-context-shiro.xml"
 }) //导入xml配置项
 public class OfficeWebApplication {
 

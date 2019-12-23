@@ -3,86 +3,56 @@ package com.example.office_web.shiro;
 import com.example.office_web.entity.User;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SimpleSession;
+import org.apache.shiro.session.mgt.ValidatingSession;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-public class WetchatSession implements Session{
+
+/**
+ * 不要全部重寫SimpleSession的屬性，如果重寫返回null，就會一大堆bug
+ */
+public class WetchatSession extends SimpleSession {
+
+    private static final long serialVersionUID = 1L;
 
     public static ThreadLocal<User> openIdThreaadLocal = new ThreadLocal();//存储传过滤的openId
 
-
-    private String id;
 
     private String code;
 
     private String openId;
 
-    @Override
-    public Serializable getId() {
-        return null;
-    }
 
-    @Override
-    public Date getStartTimestamp() {
-        return null;
-    }
 
-    @Override
-    public Date getLastAccessTime() {
-        return null;
-    }
 
-    @Override
-    public long getTimeout() throws InvalidSessionException {
-        return 0;
-    }
 
-    @Override
-    public void setTimeout(long l) throws InvalidSessionException {
 
-    }
 
-    @Override
-    public String getHost() {
-        return null;
-    }
-
-    @Override
-    public void touch() throws InvalidSessionException {
-
-    }
-
-    @Override
-    public void stop() throws InvalidSessionException {
-
-    }
 
     @Override
     public Collection<Object> getAttributeKeys() throws InvalidSessionException {
-        return null;
+        return super.getAttributeKeys();
     }
 
     @Override
     public Object getAttribute(Object o) throws InvalidSessionException {
-        return null;
+        return super.getAttribute(o);
     }
 
     @Override
     public void setAttribute(Object o, Object o1) throws InvalidSessionException {
-
+        super.setAttribute(o, o1);
     }
 
     @Override
     public Object removeAttribute(Object o) throws InvalidSessionException {
-        return null;
+        return super.removeAttribute(o);
     }
 
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
 
     public String getCode() {

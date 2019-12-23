@@ -2,7 +2,11 @@ package com.example.office_web.web;
 
 
 import com.example.office_web.entity.Sys_menu;
+import com.example.office_web.entity.User;
 import com.example.office_web.service.impl.Sys_menuServiceImpl;
+import com.example.office_web.utils.UserUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -36,14 +40,18 @@ public class Sys_menuController extends  BaseController{
      * 获取菜单列表接口
      * @return
      */
-//    public Map getSysMenuList(){
-//        try{
-//            List<Sys_menu>  menuList = sys_menuService.getSysMenuList();
-//            return ajaxSucess(menuList);
-//        }catch (Exception e){
-//            return ajaxFail("获取菜单接口发生异常");
-//        }
-//    }
+
+    @RequestMapping("/test")
+    public User getSysMenuList(){
+        try{
+//                        Subject subject = SecurityUtils.getSubject();
+//           User user1 = (User) subject.getPrincipal();
+            User user = UserUtils.getUser();
+            return user;
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     /**
      * 获取菜单列表接口
