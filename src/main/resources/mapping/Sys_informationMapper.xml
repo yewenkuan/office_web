@@ -19,6 +19,27 @@
         <result column="Introduction" property="introduction" />
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="getInfomationDetailMap" type="com.example.office_web.entity.Sys_information">
+        <result column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="cover_url" property="cover_url" />
+        <result column="Information_type" property="Information_type" />
+        <result column="collect_number" property="collect_number" />
+        <result column="like_number" property="like_number" />
+        <result column="browse_number" property="browse_number" />
+        <result column="Information_sort" property="Information_sort" />
+        <result column="create_date" property="create_date" />
+        <result column="update_date" property="update_date" />
+        <result column="create_by" property="create_by" />
+        <result column="Introduction" property="introduction" />
+        <collection property="sysInfomationPicList" ofType="com.example.office_web.entity.Sys_infomation_pic">
+            <id column="picId" property="id" />
+            <result column="pic_url" property="picUrl" />
+        </collection>
+    </resultMap>
+
 
 
     <select id="getShufflingFigureList" resultMap="BaseResultMap">
@@ -35,7 +56,9 @@
     </insert>
 
 
-    <select id="getInfomationDetail" resultMap="BaseResultMap">
-                 select  * from sys_information where id = #{id}
+    <select id="getInfomationDetail" resultMap="getInfomationDetailMap">
+                 select  s.*, i.pic_url, i.id as picId   from sys_information s left join sys_infomation_pic i on s.id = i.infomation_id
+                 where s.id = #{id}
+                 order by i.pic_sort desc
     </select>
 </mapper>

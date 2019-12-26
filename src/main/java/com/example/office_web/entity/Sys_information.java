@@ -3,6 +3,7 @@ package com.example.office_web.entity;
 import java.util.Date;
 import com.baomidou.mybatisplus.activerecord.Model;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +42,8 @@ public class Sys_information extends Model<Sys_information> {
     private String create_by;
 
     private String introduction;
+
+    private List<Sys_infomation_pic> sysInfomationPicList;
 
     public String getId() {
         return id;
@@ -134,6 +137,14 @@ public class Sys_information extends Model<Sys_information> {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public List<Sys_infomation_pic> getSysInfomationPicList() {
+        return sysInfomationPicList;
+    }
+
+    public void setSysInfomationPicList(List<Sys_infomation_pic> sysInfomationPicList) {
+        this.sysInfomationPicList = sysInfomationPicList;
     }
 
     @Override
