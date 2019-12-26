@@ -16,6 +16,7 @@
         <result column="create_date" property="create_date" />
         <result column="update_date" property="update_date" />
         <result column="create_by" property="create_by" />
+        <result column="Introduction" property="introduction" />
     </resultMap>
 
 
@@ -28,4 +29,13 @@
         select  * from sys_information where Information_type = 1 order by Information_sort desc, create_date desc
     </select>
 
+    <insert id="insertInfoI">
+        insert into sys_information(id, content)
+        values(#{id}, #{info})
+    </insert>
+
+
+    <select id="getInfomationDetail" resultMap="BaseResultMap">
+                 select  * from sys_information where id = #{id}
+    </select>
 </mapper>

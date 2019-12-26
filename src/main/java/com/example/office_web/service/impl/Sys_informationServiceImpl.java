@@ -5,6 +5,7 @@ import com.example.office_web.entity.Sys_information;
 import com.example.office_web.mapper.Sys_informationMapper;
 import com.example.office_web.service.ISys_informationService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,5 +38,18 @@ public class Sys_informationServiceImpl extends ServiceImpl<Sys_informationMappe
      */
     public List<Sys_information> getInfomationList(Pagination page){
        return baseMapper.getInfomationList(page);
+    }
+
+    public void insertInfoI(String id, String info){
+        baseMapper.insertInfoI(id, info);
+    }
+
+
+    /**
+     * 获取资讯详情
+     * @return
+     */
+    public Sys_information getInfomationDetail(String id){
+        return baseMapper.getInfomationDetail(id);
     }
 }

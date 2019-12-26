@@ -70,7 +70,8 @@ role2=user:create,user:delete
         if(arr.length == 1){
            return this.loginWetChat(arr[0]);
         }else {
-           return loginPc(arr[0], usernamePasswordToken.getPassword().toString());
+            String pwd = String.valueOf(usernamePasswordToken.getPassword());
+           return loginPc(arr[0], pwd);
         }
 
 

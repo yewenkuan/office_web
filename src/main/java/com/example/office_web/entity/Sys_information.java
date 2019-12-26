@@ -40,6 +40,8 @@ public class Sys_information extends Model<Sys_information> {
 
     private String create_by;
 
+    private String introduction;
+
     public String getId() {
         return id;
     }
@@ -123,6 +125,15 @@ public class Sys_information extends Model<Sys_information> {
 
     public void setCreate_by(String create_by) {
         this.create_by = create_by;
+    }
+
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     @Override

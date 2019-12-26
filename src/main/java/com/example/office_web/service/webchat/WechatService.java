@@ -158,7 +158,7 @@ public class WechatService {
             user.setId(UUID.randomUUID().toString());
             userService.insertUser(user);
         } catch (Exception e) {
-            logger.info("===========>插入用户异常", e);
+            logger.info("===========>插入用户异常", e.getMessage());
             logger.info("========进行用户更新操作===========");
             user.setUpdateDate(new Date());
             userService.updateUser(user);
