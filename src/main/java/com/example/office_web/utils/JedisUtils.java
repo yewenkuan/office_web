@@ -58,9 +58,9 @@ public class JedisUtils {
         Jedis jedis = null;
         try {
             jedis = JedisPooleProperties.getJedisPool().getResource();
-            if (jedis.exists(key)) {
-                jedis.del(key);
-            }
+//            if (jedis.exists(key)) {
+//                jedis.del(key);
+//            }
             Map<byte[], byte[]> map =new HashMap<>();
             for (Map.Entry<String, Object> e : value.entrySet()){
                 map.put(e.getKey().getBytes("UTF-8"), SerializeUtil.serialize(e.getValue()));

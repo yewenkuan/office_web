@@ -52,6 +52,7 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="systemAuthorizingRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
+        <property name="cacheManager" ref="cacheManager"/>
 
     </bean>
 
@@ -92,5 +93,7 @@
 
     </bean>
 
+
+    <bean id="cacheManager" class="com.example.office_web.shiro.cache.OfficeWebCacheManager" />
 
 </beans>

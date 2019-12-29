@@ -112,9 +112,38 @@ public class UserController extends BaseController{
         }
     }
 
+
+
+
+
+    /**
+     * 记得补上@Qequestbody
+     * @param user
+     * @return
+     */
+    @GetMapping
+    @RequestMapping("/testLoginPc")
+    public String testLoginPc( User user){
+        try {
+            user.setAccount("ddb");
+            user.setPwd("ddbpwd");
+            String sessionId =  wechatService.loginPc(user);
+            if(StringUtils.isNotBlank(sessionId)){
+                return ajaxSucess(sessionId);
+            }else {
+                return  ajaxFail("fail");
+            }
+
+        } catch (Exception e) {
+            logger.error("获取用户登陆异常", e);
+            return ajaxFail("fail");
+        }
+    }
+
+
     /**
      * 这个就是访问时，cookie应该带信息 。缓存管理？？？？
-     *
+     * 添加了RequiresRoles 注解的话，shiro也会进行登录验证
      * @param user
      * @return
      */

@@ -31,7 +31,7 @@ public class MyRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("===========进来了");
+        System.out.println("===========权限验证进来=======");
         // 获取身份信息
         User user = (User) principalCollection.getPrimaryPrincipal();//这个是读取到new SimpleAuthenticationInfo(user,openId, "myRealm");的user
         // 根据身份信息从数据库中查询权限数据
@@ -52,6 +52,7 @@ codedq=123,role1
 role1=user:create,user:update
 role2=user:create,user:delete
          */
+        simpleAuthorizationInfo.addRole("admin");
         for(String permission:permissions){
             simpleAuthorizationInfo.addStringPermission(permission);
         }
