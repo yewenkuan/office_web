@@ -5,6 +5,7 @@ import com.example.office_web.entity.User;
 import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.utils.JedisUtils;
 import com.example.office_web.utils.SpringContextHolder;
+import com.example.office_web.utils.application.Global;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -79,7 +80,8 @@ public class MyRealm extends AuthorizingRealm {
         }
 
 
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,user.getPwd(), "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
+
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,user.getPwd(), Global.getConfig("shiroReam"));//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
 
         if(StringUtils.isNotBlank(pwd) && pwd.equals(user.getPwd())){
             Subject subject = SecurityUtils.getSubject();
@@ -88,7 +90,7 @@ public class MyRealm extends AuthorizingRealm {
                 session =  subject.getSession(true);
             }
 
-            user.setSessionId(session.getId().toString());
+//            user.setSessionId(session.getId().toString());
             WetchatSession wetchatSession = new WetchatSession();
             wetchatSession.setId(session.getId());
             wetchatSession.setOpenId(user.getOpenId());
@@ -126,12 +128,12 @@ public class MyRealm extends AuthorizingRealm {
 
         //这个是为了用户关闭浏览器或者会话id改变时，重新在数据库中读取权限数据, 因为ShiroCache的get是以user序列化后作为key的,序列化如果属性一致则序列化后的内容一致
         //所以一次会话的sessionId不会变，读取缓存就好，不同会话不读以前会话的缓存
-        user.setSessionId(session.getId().toString());
+//        user.setSessionId(session.getId().toString());
         wetchatSession.setLastAccessTime(new Date());
         Map<String, Object> map = new HashMap<>();
         map.put(RedisKeyConsts.USER_INFO_PREFIX+session.getId().toString(), wetchatSession);
         System.out.println("验证登录================");
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,openId, "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,openId, Global.getConfig("shiroReam"));//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
         //下面这两行必须设置，不然第二次访问时，还是没登陆状态
         wetchatSession.setAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY, simpleAuthenticationInfo.getPrincipals());
         wetchatSession.setAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY, true);

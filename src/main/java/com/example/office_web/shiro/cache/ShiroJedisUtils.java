@@ -3,6 +3,7 @@ package com.example.office_web.shiro.cache;
 import com.example.office_web.entity.JedisPooleProperties;
 import com.example.office_web.utils.JedisUtils;
 import com.example.office_web.utils.SerializeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -57,6 +58,26 @@ public class ShiroJedisUtils<K, V> {
             JedisPooleProperties.getJedisPool().returnResource(jedis);
         }
         return null;
+    }
+
+
+
+    /**
+     *
+     * @param key
+     */
+    public  void del(K key){
+
+        Jedis jedis = null;
+        try {
+            jedis = JedisPooleProperties.getJedisPool().getResource();
+            Long l = jedis.hdel(SHIRO_CACHE_PREFIX.getBytes("UTF-8"),  SerializeUtil.serialize(key));
+            System.out.println("删除的数量为："+l);
+        } catch (Exception e) {
+            logger.error("setObjectMap {}", key, e);
+        } finally {
+            JedisPooleProperties.getJedisPool().returnResource(jedis);
+        }
     }
 
 }

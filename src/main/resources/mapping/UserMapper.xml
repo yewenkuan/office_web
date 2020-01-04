@@ -6,6 +6,13 @@
     <resultMap id="BaseResultMap" type="com.example.office_web.entity.User">
         <result column="id" property="id" />
         <result column="name" property="name" />
+        <result column="nickName" property="nickName" />
+        <result column="city" property="city" />
+        <result column="province" property="province" />
+        <result column="password" property="pwd" />
+        <result column="open_id" property="openId" />
+        <result column="avatarUrl" property="avatarUrl" />
+        <result column="login_name" property="account" />
     </resultMap>
 
 
@@ -27,13 +34,13 @@
     </insert>
 
 
-    <select id="getUserByOpenId" resultType="com.example.office_web.entity.User">
-        select id, nickName, city, province, open_id as openId, avatarUrl, create_date  as createDate, update_date as  updateDate
+    <select id="getUserByOpenId" resultMap="BaseResultMap">
+        select *
         from sys_user where open_id = #{openId}
     </select>
 
 
-    <select id="getUserByAccount" resultType="com.example.office_web.entity.User">
-        select password as pwd, open_id as openId from sys_user where login_name = #{account}
+    <select id="getUserByAccount"  resultMap="BaseResultMap">
+        select * from sys_user where login_name = #{account}
     </select>
 </mapper>

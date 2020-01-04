@@ -3,6 +3,7 @@ package com.example.office_web.web;
 
 import com.alibaba.fastjson.JSON;
 import com.example.office_web.entity.User;
+import com.example.office_web.service.impl.RoleService;
 import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.service.webchat.WechatService;
 import com.example.office_web.shiro.WetchatSession;
@@ -34,6 +35,9 @@ public class UserController extends BaseController{
     private UserServiceImpl userService;
     @Autowired
     private WechatService wechatService;
+
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping("/test")
     public void test(){
@@ -161,4 +165,13 @@ public class UserController extends BaseController{
     }
 
 
+    @RequestMapping("/testDelRole")
+    public String testDelRole(String openId){
+        try {
+            roleService.removeUserAuthorization(openId);
+            return ajaxSucess("del ok");
+        } catch (Exception e) {
+            return ajaxFail("fail");
+        }
+    }
 }

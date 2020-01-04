@@ -39,8 +39,8 @@ public class RedisCacher<K,V> implements Cacher<K, V> {
     }
 
     @Override
-    public void delete(String key) {
-
+    public void delete(K key) {
+        getShiroJedisUtils().del(key);
     }
 
     @Override

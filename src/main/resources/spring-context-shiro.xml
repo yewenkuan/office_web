@@ -7,6 +7,8 @@
 
     <description>Shiro Configuration</description>
 
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:application.properties"/>
+
     <!-- 安全认证过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -59,8 +61,8 @@
     <!-- 系统安全认证实现类配置 -->
     <bean id="systemAuthorizingRealm" class="com.example.office_web.shiro.MyRealm">
         <property name="cacheManager" ref="cacheManager"/>
-        <property name="name" value="myReam"/>
-        <property name="authorizationCacheName" value="authorizationCache" />
+        <property name="name" value="${shiroReam}"/>
+        <property name="authorizationCacheName" value="${authorizationCacheName}" />
     </bean>
 
     <!-- 自定义会话管理配置  默认情况下，session的管理由DefaultSecurityManager或DefaultWebSecurityManager中的SessionManager来负责。SessionManager 的父类有start方法创建session

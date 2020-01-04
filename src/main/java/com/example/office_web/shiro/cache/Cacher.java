@@ -8,7 +8,7 @@ public interface Cacher<K, V> {
 
     public V get(K key);
 
-    public void delete(String key);
+    public void delete(K key);
 
     public Set<String> keys(String string);
 
