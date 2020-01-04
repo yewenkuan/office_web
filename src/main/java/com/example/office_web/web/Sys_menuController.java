@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 2019-05-26
  */
 @RestController
-@RequestMapping("/officeWeb/sys_menu")
+@RequestMapping("/officeWeb/api/sys_menu")
 public class Sys_menuController extends  BaseController{
 
 

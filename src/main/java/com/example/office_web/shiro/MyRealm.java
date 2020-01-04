@@ -4,6 +4,7 @@ import com.example.office_web.consts.RedisKeyConsts;
 import com.example.office_web.entity.User;
 import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.utils.JedisUtils;
+import com.example.office_web.utils.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -37,21 +38,12 @@ public class MyRealm extends AuthorizingRealm {
         // 根据身份信息从数据库中查询权限数据
         //....这里使用静态数据模拟
         List<String> permissions = new ArrayList<String>();
-        permissions.add("admin");
-        permissions.add("user.delete");
+        permissions.add("mm:fick");
 
         //将权限信息封闭为AuthorizationInfo
 
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        //simpleAuthorizationInfo.addRole();  这个应该就可以同时判断根据角色授权和根据资源授权
-        /* 注意资源授权的意思是这个role1=user:create,user:update （对user资源有创建的权力）
-        [users]
-xttblog=123,role1,role2
-codedq=123,role1
-[roles]
-role1=user:create,user:update
-role2=user:create,user:delete
-         */
+
         simpleAuthorizationInfo.addRole("admin");
         for(String permission:permissions){
             simpleAuthorizationInfo.addStringPermission(permission);
@@ -87,7 +79,6 @@ role2=user:create,user:delete
         }
 
 
-
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user,user.getPwd(), "myRealm");//这里的password 要和UsernamePasswordToken token = new UsernamePasswordToken(user.getOpenId(), user.getOpenId());一样才会验证通过，这里只是对用户名做验证，密码验证给父级
 
         if(StringUtils.isNotBlank(pwd) && pwd.equals(user.getPwd())){
@@ -97,8 +88,7 @@ role2=user:create,user:delete
                 session =  subject.getSession(true);
             }
 
-            System.out.println("sessionId 为："+session.getId());
-
+            user.setSessionId(session.getId().toString());
             WetchatSession wetchatSession = new WetchatSession();
             wetchatSession.setId(session.getId());
             wetchatSession.setOpenId(user.getOpenId());
@@ -130,12 +120,13 @@ role2=user:create,user:delete
             session =  subject.getSession(true);
         }
 
-        System.out.println("sessionId 为："+session.getId());
         WetchatSession wetchatSession = new WetchatSession();
         wetchatSession.setId(session.getId());
         wetchatSession.setOpenId(openId);
 
-
+        //这个是为了用户关闭浏览器或者会话id改变时，重新在数据库中读取权限数据, 因为ShiroCache的get是以user序列化后作为key的,序列化如果属性一致则序列化后的内容一致
+        //所以一次会话的sessionId不会变，读取缓存就好，不同会话不读以前会话的缓存
+        user.setSessionId(session.getId().toString());
         wetchatSession.setLastAccessTime(new Date());
         Map<String, Object> map = new HashMap<>();
         map.put(RedisKeyConsts.USER_INFO_PREFIX+session.getId().toString(), wetchatSession);

@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.*;
 
 @RestController
-@RequestMapping("/fileUpload")
+@RequestMapping("/api/fileUpload")
 public class FileUploadController extends BaseController{
 
 

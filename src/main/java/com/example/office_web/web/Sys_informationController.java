@@ -26,7 +26,7 @@ import java.util.UUID;
  * @since 2019-12-19
  */
 @RestController
-@RequestMapping("/officeWeb/sys_information")
+@RequestMapping("/officeWeb/api/sys_information")
 public class Sys_informationController extends BaseController{
 
 

@@ -7,6 +7,7 @@ import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.service.webchat.WechatService;
 import com.example.office_web.shiro.WetchatSession;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Controller;
  * @since 2019-05-14
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -147,7 +148,8 @@ public class UserController extends BaseController{
      * @param user
      * @return
      */
-    @RequiresRoles("admin")
+
+    @RequiresPermissions("mm:fick")
     @RequestMapping("/testRole")
     public String testRole( User user){
         try {

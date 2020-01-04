@@ -52,13 +52,15 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="systemAuthorizingRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
-        <property name="cacheManager" ref="cacheManager"/>
+
 
     </bean>
 
     <!-- 系统安全认证实现类配置 -->
     <bean id="systemAuthorizingRealm" class="com.example.office_web.shiro.MyRealm">
-
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="name" value="myReam"/>
+        <property name="authorizationCacheName" value="authorizationCache" />
     </bean>
 
     <!-- 自定义会话管理配置  默认情况下，session的管理由DefaultSecurityManager或DefaultWebSecurityManager中的SessionManager来负责。SessionManager 的父类有start方法创建session

@@ -16,7 +16,7 @@ import java.util.Map;
  * 代码生成器入口
  */
 @Controller
-@RequestMapping("/generate")
+@RequestMapping("/api/generate")
 public class GenerateController {
 
     @Autowired

@@ -36,6 +36,8 @@ public class User extends Model<User> {
 
     private String sessionKey;
 
+    private String sessionId;
+
     private Date createDate;
 
     private Date updateDate;
@@ -149,5 +151,14 @@ public class User extends Model<User> {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

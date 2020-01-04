@@ -1,5 +1,6 @@
 package com.example.office_web.shiro.cache;
 
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.slf4j.Logger;
@@ -16,7 +17,18 @@ public class ShiroCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K k) throws CacheException {
-        return (V)CacherFactory.cacher.get(k);
+        System.out.println("获取缓存的key为:"+k);
+        V ob =  (V)CacherFactory.cacher.get(k);
+        if(ob instanceof SimpleAuthorizationInfo){
+            SimpleAuthorizationInfo simpleAuthorizationInfo = (SimpleAuthorizationInfo) ob;
+            Set<String> set = simpleAuthorizationInfo.getRoles();
+            for(String s : set){
+                System.out.println("权限为:"+s);
+            }
+
+        }
+        System.out.println("获取到缓存为:"+ob);
+        return ob;
         //return null;
     }
 
