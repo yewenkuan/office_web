@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.office_web.mapper.UserMapper">
-
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.office_web.entity.User">
         <result column="id" property="id" />
@@ -15,6 +14,18 @@
         <result column="login_name" property="account" />
     </resultMap>
 
+
+    <resultMap id="roleMap" type="com.example.office_web.entity.Role">
+        <result column="roleId" property="id" />
+        <result column="role_name" property="roleName" />
+        <result column="role_en_name" property="roleEnName" />
+        <collection property="permissionList" javaType="ArrayList"
+                    ofType="com.example.office_web.entity.Permission">
+            <id property="id" column="pemissionId"/>
+            <result property="permissionName" column="pemission_name"/>
+            <result property="permissionEnName" column="pemission_en_name"/>
+        </collection>
+    </resultMap>
 
     <select id="getPage" resultType="com.example.office_web.entity.User">
         select u.id , u.name, t.name as officeName from user u left join office t on u.id = t.userid
@@ -43,4 +54,17 @@
     <select id="getUserByAccount"  resultMap="BaseResultMap">
         select * from sys_user where login_name = #{account}
     </select>
+
+
+
+    <select id="getRolesByOpenId"  resultMap="roleMap">
+        select  r.id as roleId, r.role_name, r.role_en_name, p.id as pemissionId, p.pemission_name, p.pemission_en_name
+         from sys_user_role sr left join sys_user u on sr.user_id = u.id
+        left join sys_role r on sr.role_id = r.id
+        left join sys_role_pemission m on r.id = m.role_id
+        left join sys_pemission p on m.pemission_id =p.id
+        where u.open_id = #{openId}
+    </select>
+
+
 </mapper>

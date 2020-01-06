@@ -1,5 +1,8 @@
 package com.example.office_web.service.impl;
 
+import com.example.office_web.entity.Role;
+import com.example.office_web.entity.User;
+import com.example.office_web.mapper.UserMapper;
 import com.example.office_web.shiro.cache.OfficeWebCacheManager;
 import com.example.office_web.shiro.cache.RedisCacher;
 import com.example.office_web.utils.SpringContextHolder;
@@ -14,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class RoleService {
@@ -22,6 +27,11 @@ public class RoleService {
 
     @Autowired
     private OfficeWebCacheManager officeWebCacheManager;
+
+
+    @Autowired
+    private UserMapper userMapper;
+
 
 
     /**
@@ -49,5 +59,15 @@ public class RoleService {
         RedisCacher redisCacher = SpringContextHolder.getBean(RedisCacher.class);
         redisCacher.getShiroJedisUtils().del(openId);
 
+    }
+
+
+    /**
+     * 根据openId 获取 用户的权限
+     * @param openId
+     * @return
+     */
+    public List<Role> getUserAndRoleByOpenId(String openId){
+        return userMapper.getRolesByOpenId(openId);
     }
 }

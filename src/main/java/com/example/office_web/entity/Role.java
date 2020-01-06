@@ -8,6 +8,8 @@ public class Role {
 
     private String roleName;
 
+    private String roleEnName;
+
     private Integer delFlag;//0：可用 1：不可用
 
     private List<Permission> permissionList;
@@ -44,5 +46,14 @@ public class Role {
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+
+    public String getRoleEnName() {
+        return roleEnName;
+    }
+
+    public void setRoleEnName(String roleEnName) {
+        this.roleEnName = roleEnName;
     }
 }

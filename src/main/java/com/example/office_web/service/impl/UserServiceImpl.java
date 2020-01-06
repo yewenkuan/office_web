@@ -59,4 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public User getUserByOpenId(String openId){
         return userMapper.getUserByOpenId(openId);
     }
+
+
+
 }

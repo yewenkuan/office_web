@@ -153,7 +153,7 @@ public class UserController extends BaseController{
      * @return
      */
 
-    @RequiresPermissions("mm:fick")
+    @RequiresPermissions("mm:m")
     @RequestMapping("/testRole")
     public String testRole( User user){
         try {

@@ -8,6 +8,8 @@ public class Permission {
 
     private String permissionName;//名称.
 
+    private String permissionEnName;
+
     private String resourceType;//资源类型，[menu|button]
 
 
@@ -44,5 +46,13 @@ public class Permission {
 
     public void setOperaion(List<String> operaion) {
         this.operaion = operaion;
+    }
+
+    public String getPermissionEnName() {
+        return permissionEnName;
+    }
+
+    public void setPermissionEnName(String permissionEnName) {
+        this.permissionEnName = permissionEnName;
     }
 }

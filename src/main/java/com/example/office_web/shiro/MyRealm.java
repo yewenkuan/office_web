@@ -1,7 +1,9 @@
 package com.example.office_web.shiro;
 
 import com.example.office_web.consts.RedisKeyConsts;
+import com.example.office_web.entity.Role;
 import com.example.office_web.entity.User;
+import com.example.office_web.service.impl.RoleService;
 import com.example.office_web.service.impl.UserServiceImpl;
 import com.example.office_web.utils.JedisUtils;
 import com.example.office_web.utils.SpringContextHolder;
@@ -25,7 +27,8 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     private UserServiceImpl userService;
-
+    @Autowired
+    private RoleService roleService;
 
     private static final Integer EXPIRES = 86400;
     /**
@@ -36,19 +39,25 @@ public class MyRealm extends AuthorizingRealm {
         System.out.println("===========权限验证进来=======");
         // 获取身份信息
         User user = (User) principalCollection.getPrimaryPrincipal();//这个是读取到new SimpleAuthenticationInfo(user,openId, "myRealm");的user
-        // 根据身份信息从数据库中查询权限数据
-        //....这里使用静态数据模拟
-        List<String> permissions = new ArrayList<String>();
-        permissions.add("mm:fick");
+
+        List<String> shiroRoleList = new ArrayList<>();
+        List<String> shiroPemissionList = new ArrayList<>();
+
+        List<Role> roleList = roleService.getUserAndRoleByOpenId(user.getOpenId());
+        roleList.forEach(x -> {
+            shiroRoleList.add(x.getRoleEnName());
+            x.getPermissionList().forEach(y -> {
+                shiroPemissionList.add(y.getPermissionEnName());
+            });
+        });
+
 
         //将权限信息封闭为AuthorizationInfo
-
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
-        simpleAuthorizationInfo.addRole("admin");
-        for(String permission:permissions){
-            simpleAuthorizationInfo.addStringPermission(permission);
-        }
+        simpleAuthorizationInfo.addRoles(shiroRoleList);
+        simpleAuthorizationInfo.addStringPermissions(shiroPemissionList);
+
 
         return simpleAuthorizationInfo;
     }
