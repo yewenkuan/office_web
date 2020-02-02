@@ -5,18 +5,22 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.example.office_web.entity.Sys_customer_message;
 import com.example.office_web.entity.Sys_information;
+import com.example.office_web.entity.Sys_reply_message;
 import com.example.office_web.entity.User;
 import com.example.office_web.service.impl.Sys_customer_messageServiceImpl;
 import com.example.office_web.utils.UserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <p>
@@ -33,6 +37,45 @@ public class Sys_customer_messageController extends BaseController {
 
     @Autowired
     private Sys_customer_messageServiceImpl sys_customer_messageService;
+
+
+    /**
+     * 插入提问数据
+     * @param sys_customer_message
+     * @return
+     */
+    @PostMapping(value = "insertQuestion")
+    public String insertQuestion(@RequestBody Sys_customer_message sys_customer_message){
+        User user = UserUtils.getUser();
+        sys_customer_message.setUser(user);
+        sys_customer_message.setCreate_time(new Date());
+        sys_customer_message.setId(UUID.randomUUID().toString());
+        try {
+            sys_customer_messageService.insertQuestion(sys_customer_message);
+            return ajaxSucess("提问成功");
+        } catch (Exception e) {
+            logger.error("插入提问数据异常", e);
+            return ajaxFail("插入提问数据异常");
+        }
+    }
+
+    /**
+     * 插入回复内容, question 问题的id，要传, shop_id 要传，点击回复时，就知道这个提问是针对哪个商店读提问了，所以把这个id传过来
+     * @param Sys_reply_message
+     * @return
+     */
+    @PostMapping(value = "insertReplyMessage")
+    public String insertReplyMessage(@RequestBody Sys_reply_message Sys_reply_message){
+        Sys_reply_message.setCreate_date(new Date());
+        Sys_reply_message.setId(UUID.randomUUID().toString());
+        try {
+            sys_customer_messageService.insertReplyMessage(Sys_reply_message);
+            return ajaxSucess("提问成功");
+        } catch (Exception e) {
+            logger.error("插入提问数据异常", e);
+            return ajaxFail("插入提问数据异常");
+        }
+    }
 
 
     /**

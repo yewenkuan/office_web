@@ -3,6 +3,7 @@ package com.example.office_web.mapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.example.office_web.entity.Sys_customer_message;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.example.office_web.entity.Sys_reply_message;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -50,4 +51,9 @@ public interface Sys_customer_messageMapper extends BaseMapper<Sys_customer_mess
      * @return
      */
     public void updateCustomMessageState(@Param("messageId")String messageId, @Param("state")Integer state);
+
+    public void insertQuestion(Sys_customer_message sys_customer_message);
+
+
+    public void insertReplyMessage(Sys_reply_message Sys_reply_message);
 }

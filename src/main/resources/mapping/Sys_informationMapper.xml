@@ -61,4 +61,6 @@
                  where s.id = #{id}
                  order by i.pic_sort desc
     </select>
+
+
 </mapper>

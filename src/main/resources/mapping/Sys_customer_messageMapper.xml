@@ -31,7 +31,7 @@
 
 
     <select id="getToReplyList" resultMap="BaseResultMap">
-        select m.*, u.nickName from sys_customer_message m left join  sys_user u on m.user_id = u.id  where m.shop_id = (select i.id from sys_information i where i.head_id  =
+        select m.*, u.nickName from sys_customer_message m left join  sys_user u on m.user_id = u.id  where m.shop_id in (select i.id from sys_information i where i.head_id  =
          #{userId})
          <if test="queryCondition != null and queryCondition != ''">
              and m.message  like '%'||#{queryCondition}||'%'
@@ -59,8 +59,18 @@
         where id = #{messageId}
     </update>
 
-    <update id="updateStoreMessageState">
+    <update id="updateCustomMessageState">
         UPDATE sys_reply_message set flag = #{state}
         where id = #{messageId}
     </update>
+
+    <insert id="insertQuestion">
+        insert into sys_customer_message
+        values(#{id}, #{user.id}, #{message},0, #{create_time}, #{shop_id}, #{phone}, #{userName}, #{picUrl})
+    </insert>
+
+    <insert id="insertReplyMessage">
+        insert into sys_reply_message
+        values(#{id}, #{shop_id}, #{question},#{create_date}, 0, #{content})
+    </insert>
 </mapper>

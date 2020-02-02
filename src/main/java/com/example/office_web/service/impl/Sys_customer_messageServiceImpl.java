@@ -2,6 +2,7 @@ package com.example.office_web.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.example.office_web.entity.Sys_customer_message;
+import com.example.office_web.entity.Sys_reply_message;
 import com.example.office_web.entity.User;
 import com.example.office_web.mapper.Sys_customer_messageMapper;
 import com.example.office_web.service.ISys_customer_messageService;
@@ -10,6 +11,7 @@ import com.example.office_web.utils.UserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +61,15 @@ public class Sys_customer_messageServiceImpl extends ServiceImpl<Sys_customer_me
 
     public void updateCustomMessageState(String messageId){
        baseMapper.updateCustomMessageState(messageId, 1);
+    }
+
+    public void insertQuestion(Sys_customer_message sys_customer_message){
+           baseMapper.insertQuestion(sys_customer_message);
+    }
+
+
+    public void insertReplyMessage(Sys_reply_message Sys_reply_message){
+        baseMapper.insertReplyMessage(Sys_reply_message);
     }
 
 
