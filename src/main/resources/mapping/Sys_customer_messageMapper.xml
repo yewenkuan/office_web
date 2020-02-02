@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.office_web.mapper.Sys_customer_messageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.office_web.entity.Sys_customer_message">
+        <id column="id" property="id" />
+        <result column="user_id" property="user_id" />
+        <result column="message" property="message" />
+        <result column="flag" property="flag" />
+        <result column="create_time" property="create_time" />
+        <result column="shop_id" property="shop_id" />
+        <result column="phone" property="phone" />
+        <result column="pic_url" property="picUrl" />
+        <result column="user_name" property="userName" />
+        <result column="nickName" property="user.nickName" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="getMyQuestionListMap" type="com.example.office_web.entity.Sys_customer_message">
+        <id column="id" property="id" />
+        <result column="user_id" property="user_id" />
+        <result column="message" property="message" />
+        <result column="flag" property="flag" />
+        <result column="create_time" property="create_time" />
+        <result column="shop_id" property="shop_id" />
+        <result column="nickName" property="user.nickName" />
+        <result column="sys_customer_message" property="sys_reply_message.content" />
+        <result column="replyId" property="sys_reply_message.id" />
+    </resultMap>
+
+
+    <select id="getToReplyList" resultMap="BaseResultMap">
+        select m.*, u.nickName from sys_customer_message m left join  sys_user u on m.user_id = u.id  where m.shop_id = (select i.id from sys_information i where i.head_id  =
+         #{userId})
+         <if test="queryCondition != null and queryCondition != ''">
+             and m.message  like '%'||#{queryCondition}||'%'
+         </if>
+         order by m.flag , m.create_time desc
+    </select>
+
+
+    <select id="getMyQuestionList" resultMap="getMyQuestionListMap">
+        select m.*,  s.id as replyId, s.content from sys_customer_message m left join sys_reply_message s on m.id = s.question
+        where m.user_id = #{userId}
+        <if test="queryCondition != null and queryCondition != ''">
+            and m.message  like '%'||#{queryCondition}||'%'
+        </if>
+        <if test="state != null">
+            and m.flag   = #{state}
+        </if>
+
+        order by m.create_time desc
+    </select>
+
+
+    <update id="updateStoreMessageState">
+        UPDATE sys_customer_message set flag = #{state}
+        where id = #{messageId}
+    </update>
+
+    <update id="updateStoreMessageState">
+        UPDATE sys_reply_message set flag = #{state}
+        where id = #{messageId}
+    </update>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.office_web.mapper.Sys_reply_messageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.office_web.entity.Sys_reply_message">
+        <id column="id" property="id" />
+        <result column="shop_id" property="shop_id" />
+        <result column="question" property="question" />
+        <result column="create_date" property="create_date" />
+    </resultMap>
+
+</mapper>
